@@ -17,7 +17,8 @@ docker-compose up -d
 ```
 Migrate the Database
 ```
-docker exec -it todolistrestapi_symfony_1 /var/www/bin/console doctrine:database:create && /var/www/bin/console doctrine:schema:update --force
+docker exec -it todolistrestapi_symfony_1 /var/www/bin/console doctrine:database:create 
+docker exec -it todolistrestapi_symfony_1 /var/www/bin/console doctrine:schema:update --force
 ```
 
 <h2>How To Use:</h2>
