@@ -15,7 +15,7 @@ http://localhost/api/doc
 
 PUSH, PUT, DELETE AND GER Requests are available from here
 
-Adminer:
+<h2>Adminer:</h2>
 http://localhost:8080/
 DB: maria_db
 PW: Criddel
