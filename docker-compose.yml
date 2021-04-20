@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  maria_db:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: Criddel # @todo: implement some real security
+    volumes:
+    - "db-data:/var/lib/mysql"
+    ports:
+    - 3306:3306
+    restart: always
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  symfony:
+    build: .
+    ports:
+    - 80:80
+    restart: always
+    volumes:
+    - ./wishlist_rest_microservice:/var/www/ # @todo:veeeeery slow performance
+    depends_on:
+      - maria_db
+
+volumes:
+  db-data:
