@@ -11,12 +11,12 @@ docker exec -it todolistrestapi_symfony_1 /var/www/bin/console doctrine:database
 <h1>How To Use:</h1>
 
 <h2>Rest API WEB Client:</h2>
-[link](http://localhost/api/doc)
+[link]http://localhost/api/doc
 
 PUSH, PUT, DELETE AND GER Requests are available from here
 
 <h2>Adminer:</h2>
-[link](http://localhost:8080/)
+[link]http://localhost:8080/
 DB: maria_db
 PW: Criddel
 USer:root
