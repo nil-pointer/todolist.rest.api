@@ -8,6 +8,6 @@ RUN composer self-update --2
 
 RUN composer install
 
-#RUN ./bin/console doctrine:database:create && ./bin/console doctrine:schema:update --force
+#RUN /var/www/bin/console doctrine:database:create && /var/www/bin/console doctrine:schema:update --force
 
 RUN chmod 775 *
