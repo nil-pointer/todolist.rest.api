@@ -8,7 +8,6 @@ use Swagger\Annotations as SWG;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityRepository;
 use App\Entity\ToDos;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,31 +23,32 @@ class ToDosController extends AbstractController
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     /**
-     * @var EntityRepository
+     * @var \Doctrine\Persistence\ObjectRepository
      */
-    private $contactRepository;
+    private \Doctrine\Persistence\ObjectRepository $toDoRepository;
 
     /**
      * @var SwaggerResolverFactory
      */
-    private $swaggerResolverFactory;
+    private SwaggerResolverFactory $swaggerResolverFactory;
 
     /**
      * @var SerializerInterface
      */
-    private $serializer;
+    private SerializerInterface $serializer;
 
 
     public function __construct(
         EntityManagerInterface $entityManager,
         SwaggerResolverFactory $swaggerResolverFactory,
         SerializerInterface $serializer
-    ) {
+    )
+    {
         $this->entityManager = $entityManager;
-        $this->contactRepository = $entityManager->getRepository(ToDos::class);
+        $this->toDoRepository = $entityManager->getRepository(ToDos::class);
         $this->swaggerResolverFactory = $swaggerResolverFactory;
         $this->serializer = $serializer;
     }
@@ -67,7 +67,7 @@ class ToDosController extends AbstractController
      *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Returns status 200 and the contact.",
+     *         description="Returns status 200 and the todo.",
      *         @SWG\Schema(
      *             type="object",
      *             properties={
@@ -79,17 +79,16 @@ class ToDosController extends AbstractController
      *     ),
      *     @SWG\Response(
      *         response=404,
-     *         description="Returns status 404 if there is no contact with the given id."
+     *         description="Returns status 404 if there is no todo with the given id."
      *     )
      * )
      */
     public function getAction(int $id): JsonResponse
     {
 //        if (!isset($id)) {
-            //$toDo = $this->contactRepository->findAll();
+//        $toDo = $this->toDoRepository->findAll();
 //        } else {
-            $toDo = $this->contactRepository->find($id);
-            error_log(print_r($toDo,1));
+        $toDo = $this->toDoRepository->find($id);
 //        }
         if (!$toDo) {
             throw new NotFoundHttpException();
@@ -102,7 +101,7 @@ class ToDosController extends AbstractController
      * @Route("/api/todos/{id}", name="todos_put", methods={"PUT"}, requirements={"id"="\d+"})
      *
      * @SWG\Put(
-     *     summary="Updates an existing contact.",
+     *     summary="Updates an existing todo.",
      *     produces={"application/json"},
      *     @SWG\Parameter(name="id", in="path", required=true, type="integer"),
      *     @SWG\Parameter(
@@ -128,7 +127,7 @@ class ToDosController extends AbstractController
      *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Returns status 200 and the modified contact.",
+     *         description="Returns status 200 and the modified todo.",
      *         @SWG\Schema(
      *             type="object",
      *             properties={
@@ -140,7 +139,7 @@ class ToDosController extends AbstractController
      *     ),
      *     @SWG\Response(
      *         response=404,
-     *         description="Returns status 404 if there is no contact with the given id."
+     *         description="Returns status 404 if there is no todo with the given id."
      *     )
      * )
      */
@@ -148,7 +147,7 @@ class ToDosController extends AbstractController
     {
         $this->validateRequest($request);
 
-        $toDo = $this->contactRepository->find($id);
+        $toDo = $this->toDoRepository->find($id);
         if (!$toDo) {
             throw new NotFoundHttpException();
         }
@@ -163,7 +162,7 @@ class ToDosController extends AbstractController
      * @Route("/api/todos/{id}", name="todos_delete", methods={"DELETE"}, requirements={"id"="\d+"})
      *
      * @SWG\Delete(
-     *     summary="Deletes the given contact.",
+     *     summary="Deletes the given todo.",
      *     produces={"application/json"},
      *     @SWG\Parameter(
      *         name="id",
@@ -173,17 +172,17 @@ class ToDosController extends AbstractController
      *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Returns status 200 if the contact was deleted."
+     *         description="Returns status 200 if the todo was deleted."
      *     ),
      *     @SWG\Response(
      *         response=404,
-     *         description="Returns status 404 if there is no contact with the given id."
+     *         description="Returns status 404 if there is no todo with the given id."
      *     )
      * )
      */
-    public function deleteAction(int $id)
+    public function deleteAction(int $id) :Response
     {
-        $toDo = $this->contactRepository->find($id);
+        $toDo = $this->toDoRepository->find($id);
         if (!$toDo) {
             throw new NotFoundHttpException();
         }
@@ -198,7 +197,7 @@ class ToDosController extends AbstractController
      * @Route("/api/todos", name="todos_post", methods={"POST"})
      *
      * @SWG\Post(
-     *     summary="Adds a new ToDo.",
+     *     summary="Adds a new todo.",
      *     produces={"application/json"},
      *     @SWG\Parameter(
      *         name="body",
@@ -223,7 +222,7 @@ class ToDosController extends AbstractController
      *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Returns status 200 and the new contact.",
+     *         description="Returns status 200 and the new todo.",
      *         @SWG\Schema(
      *             type="object",
      *             properties={
@@ -238,7 +237,7 @@ class ToDosController extends AbstractController
     public function postAction(Request $request): JsonResponse
     {
         $this->validateRequest($request);
-        $toDo = $this->serializer->deserialize($request->getContent(),ToDos::class, 'json');
+        $toDo = $this->serializer->deserialize($request->getContent(), ToDos::class, 'json');
 
         $this->entityManager->persist($toDo);
         $this->entityManager->flush();
@@ -273,6 +272,7 @@ class ToDosController extends AbstractController
 
     /**
      * validation between request an annotations
+     *
      * @param Request $request
      */
     protected function validateRequest(Request $request)

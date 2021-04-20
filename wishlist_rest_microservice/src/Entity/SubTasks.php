@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +16,7 @@ class SubTasks
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
 //    /**
 //     * OWNING SIDE
@@ -32,40 +31,40 @@ class SubTasks
     /**
      * @ORM\Column(name="name", type="string", length=64)
      */
-    private $name;
+    private string $name;
 
     /**
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    private string $description;
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
+     * @param int $id
      */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
 //    /**
-//     * @return mixed
+//     * @return string
 //     */
-//    public function getToDos()
+//    public function getToDos() :string
 //    {
 //        return $this->toDos;
 //    }
 //
 //    /**
-//     * @param mixed $toDos
+//     * @param string $toDos
 //     */
 //    public function setToDos($toDos): void
 //    {
@@ -73,33 +72,33 @@ class SubTasks
 //    }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
     /**
-     * @param mixed $description
+     * @param string $description
      */
-    public function setDescription($description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
